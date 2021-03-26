@@ -13,16 +13,42 @@ const boxSection = document.querySelector('#box-section');
 
 const myLibrary = [];
 
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+// First way to Create factory fucntion and return book:
+// function makeLibrary(title, author, pages, read){
+//   const book = {};
+//   book.title = title;
+//   book.author = author;
+//   book.pages = pages;
+//   book.read = read;
+//   return book
+// }
+
+// More efficient way to do that:
+// function makeLibrary(title, author, pages, read) {
+//   return {
+//     title, author, pages, read,
+//   };
+// }
+
+class MakeLibrary {
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
+
+  pushToArr() {
+    myLibrary.push(this);
+  }
 }
 
 function addBookToLib() {
-  const newBook = new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookRead.checked);
-  myLibrary.push(newBook);
+  const newBook = new MakeLibrary(bookTitle.value,
+    bookAuthor.value,
+    bookPages.value,
+    bookRead.checked);
+  newBook.pushToArr();
 
   // create elements for a book display:
   const boxDiv = document.createElement('div');
@@ -68,11 +94,15 @@ function addBookToLib() {
   readBtn.addEventListener('click', () => {
     if (bookRead.checked === true) {
       bookRead.checked = false;
+      // this to change the status in the myLibrary array incase of save it locally.
+      newBook.read = false;
       boxRead.innerText = 'Opps , I did not read this book !';
       readBtn.innerText = 'I read this book';
       readBtn.classList = 'btn btn-success m-1 p-1';
     } else {
       bookRead.checked = true;
+      // this to change the status in the myLibrary array incase of save it locally.
+      newBook.read = true;
       boxRead.innerText = 'I read This book';
       readBtn.innerText = 'Not really , I did not read it !';
       readBtn.classList = 'btn btn-danger m-1 p-1';
